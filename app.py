@@ -17,7 +17,7 @@ def initialize_session_state():
 
 initialize_session_state()
 
-st.title("GreeneDesk Conversational Chatbot 🤖")
+st.title("GreeneDesk Conversational Chatbot")
 
 # Create footer container for the microphone
 footer_container = st.container()
