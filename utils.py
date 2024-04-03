@@ -8,6 +8,10 @@ api_key = os.getenv("openai_api_key")
 
 client = OpenAI(api_key=api_key)
 
+def get_text_input():
+    user_input = st.text_input("Enter your question or message:")
+    return user_input
+
 def get_answer(messages):
     system_message = [{"role": "system", "content": "You are an helpful AI chatbot, that answers questions asked by User about Swim Schools."}]
     messages = system_message + messages
