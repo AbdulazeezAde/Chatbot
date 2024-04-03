@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-from utils import get_answer, text_to_speech, autoplay_audio, speech_to_text
+from utils import get_answer, text_to_speech, autoplay_audio, speech_to_text, get_text_input
 from audio_recorder_streamlit import audio_recorder
 from streamlit_float import *
 
@@ -18,7 +18,11 @@ def initialize_session_state():
 initialize_session_state()
 
 st.title("GreeneDesk Conversational Chatbot")
-
+user_text = get_text_input()
+if user_text:
+    messages = [{"role": "user", "content": user_text}]
+    response = get_answer(messages)
+    st.write(response)
 # Create footer container for the microphone
 footer_container = st.container()
 with footer_container:
