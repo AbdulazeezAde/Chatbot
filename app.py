@@ -17,7 +17,7 @@ initialize_session_state()
 
 st.title("GreeneDesk Conversational Chatbot")
 
-# Create container for chat messages and inputs
+# Create container for chat messages
 chat_container = st.container()
 
 with chat_container:
@@ -25,49 +25,53 @@ with chat_container:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-    user_text = get_text_input()
-    if user_text:
-        st.session_state.messages.append({"role": "user", "content": user_text})
-        with st.chat_message("user"):
-            st.write(user_text)
-
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking🤔..."):
-                final_response = get_answer(st.session_state.messages)
-                st.write(final_response)
-                st.session_state.messages.append({"role": "assistant", "content": final_response})
-
-# Create footer container for the microphone
+# Create footer container for the text input, microphone, and chat inputs
 footer_container = st.container()
 
 with footer_container:
-    audio_bytes = audio_recorder()
+    col1, col2 = st.columns(2)
 
-    if audio_bytes:
-        # Write the audio bytes to a file
-        with st.spinner("Transcribing..."):
-            webm_file_path = "temp_audio.mp3"
-            with open(webm_file_path, "wb") as f:
-                f.write(audio_bytes)
+    with col1:
+        user_text = get_text_input()
+        if user_text:
+            st.session_state.messages.append({"role": "user", "content": user_text})
+            with st.chat_message("user"):
+                st.write(user_text)
 
-            transcript = speech_to_text(webm_file_path)
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking🤔..."):
+                    final_response = get_answer(st.session_state.messages)
+                    st.write(final_response)
+                    st.session_state.messages.append({"role": "assistant", "content": final_response})
 
-            if transcript:
-                st.session_state.messages.append({"role": "user", "content": transcript})
-                with st.chat_message("user"):
-                    st.write(transcript)
+    with col2:
+        audio_bytes = audio_recorder()
 
-                os.remove(webm_file_path)
+        if audio_bytes:
+            # Write the audio bytes to a file
+            with st.spinner("Transcribing..."):
+                webm_file_path = "temp_audio.mp3"
+                with open(webm_file_path, "wb") as f:
+                    f.write(audio_bytes)
 
-                with st.chat_message("assistant"):
-                    with st.spinner("Thinking🤔..."):
-                        final_response = get_answer(st.session_state.messages)
-                        with st.spinner("Generating audio response..."):
-                            audio_file = text_to_speech(final_response)
-                            autoplay_audio(audio_file)
-                            st.write(final_response)
-                            st.session_state.messages.append({"role": "assistant", "content": final_response})
-                            os.remove(audio_file)
+                transcript = speech_to_text(webm_file_path)
+
+                if transcript:
+                    st.session_state.messages.append({"role": "user", "content": transcript})
+                    with st.chat_message("user"):
+                        st.write(transcript)
+
+                    os.remove(webm_file_path)
+
+                    with st.chat_message("assistant"):
+                        with st.spinner("Thinking🤔..."):
+                            final_response = get_answer(st.session_state.messages)
+                            with st.spinner("Generating audio response..."):
+                                audio_file = text_to_speech(final_response)
+                                autoplay_audio(audio_file)
+                                st.write(final_response)
+                                st.session_state.messages.append({"role": "assistant", "content": final_response})
+                                os.remove(audio_file)
 
 # Float the footer container and provide CSS to target it with
 footer_container.float("bottom: 0rem;")
