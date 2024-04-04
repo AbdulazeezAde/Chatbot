@@ -22,8 +22,8 @@ chat_container = st.container()
 
 with chat_container:
     for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.write(message["content"])
+        with st.sidebar.chat_message(message["role"]):
+            st.sidebar.write(message["content"])
 
 # Create container for text input
 text_input_container = st.container()
