@@ -22,19 +22,19 @@ chat_container = st.container()
 
 with chat_container:
     for message in st.session_state.messages:
-        with st.sidebar.chat_message(message["role"]):
-            st.sidebar.write(message["content"])
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
 
 # Create container for text input
-text_input_container = st.container()
+text_input_container = st.sidebar.container()
 
 with text_input_container:
     user_text = get_text_input()
     if user_text:
         messages = [{"role": "user", "content": user_text}]
         response = get_answer(messages)
-        st.session_state.messages.append({"role": "user", "content": user_text})
-        st.session_state.messages.append({"role": "assistant", "content": response})
+        st.sidebar.session_state.messages.append({"role": "user", "content": user_text})
+        st.sidebar.session_state.messages.append({"role": "assistant", "content": response})
 
 # Create footer container for the microphone
 footer_container = st.container()
