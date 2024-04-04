@@ -33,7 +33,7 @@ with text_input_container:
     if user_text:
         messages = [{"role": "user", "content": user_text}]
         response = get_answer(messages)
-        st.sidebar.session_state.messages.append({"role": "user", "content": user_text})
+        st.session_state.messages.append({"role": "user", "content": user_text})
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 # Create footer container for the microphone
