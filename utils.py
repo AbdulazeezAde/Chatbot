@@ -9,16 +9,38 @@ api_key = os.getenv("openai_api_key")
 client = OpenAI(api_key=api_key)
 
 def get_text_input():
+
     user_input = st.text_input("Enter your question or message:")
+
     return user_input
+
+def create_vector_store(pdf_files):
+
+    loaders = [PyPDFLoader(file) for file in pdf_files]
+
+    docs = []
+
+    for loader in loaders:
+
+        docs.extend(loader.load())
+
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    text_chunks = text_splitter.split_documents(docs)
+    embeddings = OpenAIEmbeddings(openai_api_key=api_key)
+    vector_store = Chroma.from_documents(docs, embeddings, persist_directory="chroma_db")
+    return vector_store
+
+def get_conversation_chain(vector_store):
+    llm = ChatOpenAI(model_name="gpt-3.5-turbo-1106", temperature=0, openai_api_key=api_key))
+    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vector_store.as_retriever(), memory=memory)
+    return conversation_chain
 
 def get_answer(messages):
     system_message = [{"role": "system", "content": "You are an helpful AI chatbot, that answers questions asked by User about Swim Schools."}]
     messages = system_message + messages
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
-        messages=messages
-    )
+    response = st.session_state.conversation()
+    response = conversation_chain({"question": messages[-1]["content"], "chat_history": messages})
     return response.choices[0].message.content
 
 def speech_to_text(audio_data):
