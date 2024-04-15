@@ -40,7 +40,6 @@ def get_conversation_chain(vector_store):
 def get_answer(messages):
     system_message = [{"role": "system", "content": "You are an helpful AI chatbot, that answers questions asked by User about Swim Schools."}]
     messages = system_message + messages
-    response = st.session_state.conversation()
     response = conversation_chain({"question": messages[-1]["content"], "chat_history": messages})
     return response.choices[0].message.content
 
