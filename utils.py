@@ -73,3 +73,7 @@ def autoplay_audio(file_path: str):
     </audio>
     """
     st.markdown(md, unsafe_allow_html=True)
+
+pdf_files = ["CGC-Aquatics-Programs-Parent-Handbook.pdf"]
+vector_store = create_vector_store(pdf_files)
+conversation_chain = get_conversation_chain(vector_store)
