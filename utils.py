@@ -41,7 +41,7 @@ def get_answer(messages):
     system_message = [{"role": "system", "content": "You are an helpful AI chatbot, that answers questions asked by User about Swim Schools."}]
     messages = system_message + messages
     response = conversation_chain({"question": messages[-1]["content"], "chat_history": messages})
-    return response.choices[0].message.content
+    return response
 
 def speech_to_text(audio_data):
     with open(audio_data, "rb") as audio_file:
