@@ -1,33 +1,34 @@
 from openai import OpenAI
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import Chroma
+from langchain.chains import RetrievalQA, ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+from langchain.chat_models import ChatOpenAI
+from langchain.document_loaders import PyPDFLoader
 import os
 from dotenv import load_dotenv
 import base64
 import streamlit as st
+
 load_dotenv()
 api_key = os.getenv("openai_api_key")
 
 client = OpenAI(api_key=api_key)
 
 def get_text_input():
-
     user_input = st.text_input("Enter your question or message:")
-
     return user_input
 
 def create_vector_store(pdf_files):
-
     loaders = [PyPDFLoader(file) for file in pdf_files]
-
     docs = []
-
     for loader in loaders:
-
         docs.extend(loader.load())
-
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     text_chunks = text_splitter.split_documents(docs)
     embeddings = OpenAIEmbeddings(openai_api_key=api_key)
-    vector_store = Chroma.from_documents(docs, embeddings, persist_directory="chroma_db")
+    vector_store = Chroma.from_documents(text_chunks, embeddings, persist_directory="chroma_db")
     return vector_store
 
 def get_conversation_chain(vector_store):
