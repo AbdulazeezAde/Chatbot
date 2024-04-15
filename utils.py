@@ -1,7 +1,7 @@
 from openai import OpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
+from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA, ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
@@ -28,7 +28,7 @@ def create_vector_store(pdf_files):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     text_chunks = text_splitter.split_documents(docs)
     embeddings = OpenAIEmbeddings(openai_api_key=api_key)
-    vector_store = FAISS.from_documents(texts = text_chunks, embedding = embeddings, persist_directory="chroma_db")
+    vector_store = FAISS.from_documents(text_chunks, embeddings)
     return vector_store
 
 def get_conversation_chain(vector_store):
