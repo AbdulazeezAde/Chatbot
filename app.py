@@ -4,9 +4,7 @@ from utils import get_answer, text_to_speech, autoplay_audio, speech_to_text, ge
 from audio_recorder_streamlit import audio_recorder
 from streamlit_float import *
 
-pdf_files = ["CGC-Aquatics-Programs-Parent-Handbook.pdf"]
-vector_store = create_vector_store(pdf_files)
-conversation_chain = get_conversation_chain(vector_store)
+
 # Float feature initialization
 float_init()
 
