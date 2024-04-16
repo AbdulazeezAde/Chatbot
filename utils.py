@@ -37,11 +37,17 @@ def get_conversation_chain(vector_store):
     conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vector_store.as_retriever(), memory=memory)
     return conversation_chain
 
+
 def get_answer(conversation_chain, messages):
-    system_message = [{"role": "system", "content": "You are an helpful AI chatbot, that answers questions asked by User about Swim Schools."}]
-    messages = system_message + messages
-    response = conversation_chain({"question": messages[-1]["content"], "chat_history": messages})
+    # Add a system message indicating the role of the bot
+    system_message = {"role": "system", "content": "You are a helpful AI chatbot that answers questions asked by users about Swim Schools."}
+    messages.append(system_message)
+    # Get the user's question from the last message
+    user_question = messages[-2]["content"]  # Assuming the last message is from the user
+    # Provide the user's question and the chat history to the conversation chain
+    response = conversation_chain({"question": user_question, "chat_history": messages})
     return response
+
 
 def speech_to_text(audio_data):
     with open(audio_data, "rb") as audio_file:
