@@ -37,7 +37,7 @@ def get_conversation_chain(vector_store):
     conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vector_store.as_retriever(), memory=memory)
     return conversation_chain
 
-def get_answer(messages):
+def get_answer(conversation_chain, messages):
     system_message = [{"role": "system", "content": "You are an helpful AI chatbot, that answers questions asked by User about Swim Schools."}]
     messages = system_message + messages
     response = conversation_chain({"question": messages[-1]["content"], "chat_history": messages})
