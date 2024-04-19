@@ -5,6 +5,7 @@ from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA, ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
+from langchain.chains.question_answering import load_qa_chain
 from langchain.document_loaders import PyPDFLoader
 import os
 from dotenv import load_dotenv
@@ -39,14 +40,14 @@ def get_conversation_chain(vector_store):
 
 
 def get_answer(conversation_chain, messages):
-    # Add a system message indicating the role of the bot
+    llm = ChatOpenAI(model_name="gpt-3.5-turbo-1106", temperature=0, openai_api_key=api_key)
+    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vector_store.as_retriever(), memory=memory)
     system_message = {"role": "system", "content": "You are a helpful AI chatbot that answers questions asked by users about Swim Schools."}
     messages.append(system_message)
-    # Get the user's question from the last message
-    user_question = messages[-2]["content"]  # Assuming the last message is from the user
-    # Provide the user's question and the chat history to the conversation chain
+    user_question = messages[-2]["content"]
     response = conversation_chain({"question": user_question, "chat_history": messages})
-    return response
+    return response.choices[0]["message"]
 
 
 def speech_to_text(audio_data):
