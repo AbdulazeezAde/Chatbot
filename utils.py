@@ -57,6 +57,9 @@ def speech_to_text(audio_data):
     return transcript
 
 def text_to_speech(input_text):
+    max_length = 4096
+    if len(input_text) > max_length:
+        input_text = textwrap.shorten(input_text, max_length, placeholder="...")
     response = client.audio.speech.create(
         model="tts-1",
         voice="nova",
