@@ -47,7 +47,7 @@ def get_answer(messages):
     memory = conversation_chain.memory
     if isinstance(memory, ConversationBufferMemory):
         memory.clear()
-    return response.chat_history[1]
+    return response["answer"]
 
 
 def speech_to_text(audio_data):
