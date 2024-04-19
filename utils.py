@@ -41,10 +41,11 @@ def get_conversation_chain(vector_store):
 
 def get_answer(messages):
     system_message = {"role": "system", "content": "You are a helpful AI chatbot that answers questions asked by users about Swim Schools."}
-    messages.append(system_message)
-    user_question = messages[-2]["content"]
+    #messages.append(system_message)
+    messages = system_message + messages
+    #user_question = messages[-2]["content"]
     response = conversation_chain({"question": user_question, "chat_history": messages})
-    return response.answer[1]
+    return response
 
 
 def speech_to_text(audio_data):
