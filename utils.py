@@ -44,6 +44,9 @@ def get_answer(messages):
     messages.append(system_message)
     user_question = messages[-2]["content"]
     response = conversation_chain({"question": user_question, "chat_history": messages})
+    memory = conversation_chain.memory
+    if isinstance(memory, ConversationBufferMemory):
+        memory.reset()
     return response
 
 
