@@ -43,10 +43,11 @@ def get_answer(messages):
     system_message = {"role": "system", "content": "You are a helpful AI chatbot that answers questions asked by users about Swim Schools."}
     messages.append(system_message)
     user_question = messages[-2]["content"]
-    response = conversation_chain({"question": user_question, "chat_history": messages})
+    responses = conversation_chain({"question": user_question, "chat_history": messages})
     memory = conversation_chain.memory
     if isinstance(memory, ConversationBufferMemory):
         memory.clear()
+    response = responses["result"]
     return response
 
 
