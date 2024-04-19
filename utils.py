@@ -84,6 +84,22 @@ def autoplay_audio(file_path: str):
     """
     st.markdown(md, unsafe_allow_html=True)
 
-pdf_files = ["CGC-Aquatics-Programs-Parent-Handbook.pdf"]
+pdf_files = [
+    "CGC-Aquatics-Programs-Parent-Handbook.pdf",
+    "client-handbook-recreation.pdf",
+    "curriculum_swimming_and_water_safety-a_guide_for_parents.pdf",
+    "dipadees_learntoswim_infobk.pdf",
+    "LTS flyer Term 3 2015.pdf",
+    "National-Swimming-and-Water-Safety-Framework_FINAL-2020.pdf",
+    "Parent Handbook.pdf",
+    "ssa_info_book.pdf",
+    "Swim+School+-+Parents+Handbook-lowres-web.pdf",
+    "Swimming Lessons Level Progression Chart _ The Y.pdf",
+    "Swim-Lessons-Parent-Handbook_r4.pdf",
+    "WIRAC LTS Timetable.pdf",
+    "Y NSW Swim School Program - Terms and Conditions _ The Y.pdf",
+    "YMCA Swim Lesson Level Guide.pdf",
+    "YMCA-Swim-School-Brochure.pdf",
+   ]
 vector_store = create_vector_store(pdf_files)
 conversation_chain = get_conversation_chain(vector_store)
