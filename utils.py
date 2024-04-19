@@ -44,7 +44,7 @@ def get_answer(messages):
     #messages.append(system_message)
     messages = system_message + messages
     #user_question = messages[-2]["content"]
-    response = conversation_chain({"question": user_question, "chat_history": messages})
+    response = conversation_chain({"question": messages, "chat_history": messages})
     return response
 
 
