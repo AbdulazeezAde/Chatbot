@@ -35,7 +35,7 @@ with text_input_container:
     user_text = get_text_input()
     if user_text:
         messages = [{"role": "user", "content": user_text}]
-        response = get_answer(conversation_chain, messages)
+        response = get_answer(messages)
         st.session_state.messages.append({"role": "user", "content": user_text})
         st.session_state.messages.append({"role": "assistant", "content": response})
 
