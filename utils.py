@@ -47,7 +47,7 @@ def get_answer(messages):
     messages.append(system_message)
     user_question = messages[-2]["content"]
     response = conversation_chain({"question": user_question, "chat_history": messages})
-    return response.choices[0]["message"]
+    return response
 
 
 def speech_to_text(audio_data):
